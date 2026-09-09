@@ -32,9 +32,9 @@
     --text: #f0ece4;
     --text-muted: #6b6b6b;
     --text-dim: #999;
-    --accent: #e8622a;
-    --accent-2: #ff8c42;
-    --accent-glow: rgba(232, 98, 42, 0.15);
+    --accent: #a78bfa;
+    --accent-2: #c4b5fd;
+    --accent-glow: rgba(167, 139, 250, 0.15);
     --green: #4ade80;
     --font-display: 'Syne', sans-serif;
     --font-mono: 'Space Mono', monospace;
@@ -171,7 +171,7 @@ body {
 .btn-primary:hover {
     background: var(--accent-2);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(232, 98, 42, 0.35);
+    box-shadow: 0 8px 30px rgba(167, 139, 250, 0.35);
 }
 
 .btn-ghost {
@@ -241,7 +241,7 @@ body {
     content: '';
     position: absolute; top: -20%; right: -10%;
     width: 60vw; height: 60vw;
-    background: radial-gradient(circle, rgba(232,98,42,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -458,13 +458,13 @@ body {
     transition: border-color 0.3s, transform 0.3s;
 }
 .exp-card:hover {
-    border-color: rgba(232, 98, 42, 0.3);
+    border-color: rgba(167, 139, 250, 0.3);
     transform: translateX(6px);
 }
 .exp-icon {
     width: 48px; height: 48px;
     background: var(--accent-glow);
-    border: 1px solid rgba(232, 98, 42, 0.3);
+    border: 1px solid rgba(167, 139, 250, 0.3);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     color: var(--accent);
@@ -507,7 +507,7 @@ body {
     transition: border-color 0.3s, transform 0.3s;
 }
 .skill-category:hover {
-    border-color: rgba(232, 98, 42, 0.3);
+    border-color: rgba(167, 139, 250, 0.3);
     transform: translateY(-4px);
 }
 .skill-cat-header {
@@ -538,7 +538,7 @@ body {
 }
 .skill-tags span:hover {
     color: var(--accent);
-    border-color: rgba(232,98,42,0.4);
+    border-color: rgba(167,139,250,0.4);
 }
 
 /* ===== EXPERIENCE ===== */
@@ -694,8 +694,8 @@ body {
     font-family: var(--font-mono);
     font-size: 1.1rem;
     color: var(--accent);
-    background: rgba(232, 98, 42, 0.1);
-    border: 1px solid rgba(232, 98, 42, 0.2);
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.2);
     padding: 0.3rem 0.9rem;
     border-radius: 4px;
 }
@@ -774,7 +774,7 @@ body {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--accent);
-    background: rgba(232,98,42,0.03);
+    background: rgba(167,139,250,0.03);
 }
 .form-group input::placeholder,
 .form-group textarea::placeholder { color: var(--text-muted); }
