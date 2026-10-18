@@ -4,1616 +4,899 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Muhammed Fazal — Backend Engineer | Go Developer</title>
+    <title>Muhammed Fazal — Backend Engineer | Go Systems</title>
     <meta name="description"
-        content="Muhammed Fazal — Backend Engineer specializing in Go, building scalable microservices, distributed systems, and high-performance APIs.">
+        content="Personal technical journal and portfolio of Muhammed Fazal, Go Backend Engineer. Specializing in distributed systems, asynchronous event pipelines, and resilient software.">
     <meta name="author" content="Muhammed Fazal">
     <meta name="keywords"
-        content="Muhammed Fazal, Backend Engineer, Go Developer, Golang, Microservices, Distributed Systems, API Developer, Portfolio">
+        content="Muhammed Fazal, Backend Engineer, Go, Golang, Microservices, Distributed Systems, PostgreSQL, Kafka, Redis, Hexagonal Architecture">
     <meta property="og:title" content="Muhammed Fazal — Backend Engineer">
     <meta property="og:description"
         content="Backend Engineer specializing in Go, building scalable microservices, distributed systems, and high-performance APIs.">
     <meta property="og:type" content="website">
+
+    <!-- Typography: Geist (Interface), Newsreader (Editorial Serif), IBM Plex Mono (Technical Metadata) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;450;500;600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        /* ===== RESET & VARIABLES ===== */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            scroll-behavior: smooth;
-        }
+        /* ==========================================================================
+           DESIGN SYSTEM TOKENS
+           - Main Background:    #20211F (Warm charcoal / olive undertone, NOT pure black)
+           - Secondary Surface:  #292A27
+           - Primary Text:        #EAE8E1 (Warm off-white)
+           - Secondary Text:      #9A9A90 (Refined muted stone)
+           - Accent:              #B5C878 (Muted lime)
+           - Borders:             #3A3B36
+           ========================================================================== */
 
         :root {
-            --bg: #080808;
-            --bg-2: #0f0f0f;
-            --bg-3: #141414;
-            --surface: #1a1a1a;
-            --border: rgba(255, 255, 255, 0.07);
-            --text: #f0ece4;
-            --text-muted: #6b6b6b;
-            --text-dim: #999;
-            --accent: #a78bfa;
-            --accent-2: #c4b5fd;
-            --accent-glow: rgba(167, 139, 250, 0.15);
-            --green: #4ade80;
-            --font-display: 'Syne', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --bg-main: #20211F;
+            --bg-surface: #292A27;
+            --bg-surface-subtle: #242522;
+            --text-primary: #EAE8E1;
+            --text-secondary: #9A9A90;
+            --text-muted: #6E7067;
+            --accent: #B5C878;
+            --accent-dim: rgba(181, 200, 120, 0.12);
+            --accent-border: rgba(181, 200, 120, 0.35);
+            --border: #3A3B36;
+            --border-subtle: #2E302B;
+
+            --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-serif: "Newsreader", Georgia, serif;
+            --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+
+            --max-width: 920px;
+            --line-height-body: 1.68;
+        }
+
+        /* Reset & Defaults */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
-            overflow-x: hidden;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: var(--line-height-body);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             scroll-behavior: smooth;
         }
 
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font-display);
-            overflow-x: hidden;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* ===== NOISE OVERLAY ===== */
-        .noise {
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-            opacity: 0.025;
-            pointer-events: none;
-            z-index: 9997;
-        }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        /* ===== HEADER ===== */
-        #header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.8rem 6%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-            background: rgba(8, 8, 8, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        #header.scrolled {
-            padding: 1.2rem 6%;
-            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .logo {
-            font-family: var(--font-mono);
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: -0.02em;
-            transition: 0.2s;
-        }
-
-        .logo:hover {
-            color: var(--accent);
-        }
-
-        .logo-dot {
-            color: var(--accent);
-        }
-
-        .navbar {
-            display: flex;
-            gap: 3.5rem;
-        }
-
-        .navbar a {
-            font-size: 1.3rem;
+        /* Typography Hierarchy */
+        h1, h2, h3, h4 {
+            color: var(--text-primary);
             font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            transition: color 0.2s;
-            position: relative;
+            letter-spacing: -0.015em;
         }
 
-        .navbar a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s;
+        .serif-heading {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            letter-spacing: -0.02em;
         }
 
-        .navbar a:hover {
-            color: var(--text);
+        p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            font-weight: 400;
         }
 
-        .navbar a:hover::after {
-            width: 100%;
+        p strong {
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
-        .navbar a.active {
-            color: var(--text);
-        }
-
-        .navbar a.active::after {
-            width: 100%;
-        }
-
-        .header-cta {
-            font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            padding: 0.8rem 1.8rem;
-            border-radius: 2px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .header-cta:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        #menu-icon {
-            display: none;
-            font-size: 2.2rem;
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        /* ===== SHARED UTILS ===== */
-        .about-badge {
-            display: inline-block;
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            color: var(--accent);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .about-badge::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1.2rem;
-            height: 1px;
-            background: var(--accent);
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: var(--accent);
-            color: white;
-            font-family: var(--font-mono);
-            font-size: 1.3rem;
-            font-weight: 700;
-            padding: 1.2rem 2.8rem;
-            border-radius: 2px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-2);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(167, 139, 250, 0.35);
-        }
-
-        .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: transparent;
-            color: var(--text);
-            font-family: var(--font-mono);
-            font-size: 1.3rem;
-            font-weight: 700;
-            padding: 1.2rem 2.8rem;
-            border-radius: 2px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .section-header {
-            margin-bottom: 6rem;
-        }
-
-        .section-header h2 {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 5vw, 6rem);
-            font-weight: 800;
-            line-height: 1;
-            color: var(--text);
-        }
-
-        /* ===== SCROLL ANIMATIONS ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 {
-            transition-delay: 0.1s;
-        }
-
-        .reveal-delay-2 {
-            transition-delay: 0.2s;
-        }
-
-        .reveal-delay-3 {
-            transition-delay: 0.3s;
-        }
-
-        .reveal-delay-4 {
-            transition-delay: 0.4s;
-        }
-
-        /* ===== HOME ===== */
-        .home {
-            min-height: 100vh;
-            padding: 12rem 6% 6rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            align-items: center;
-            position: relative;
-            overflow: clip;
-        }
-
-        .home-grid-lines {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-        }
-
-        .home::before {
-            content: '';
-            position: absolute;
-            top: -20%;
-            right: -10%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(167, 139, 250, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .home-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--green);
-            margin-bottom: 2.5rem;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-            padding: 0.5rem 1.2rem;
-            border-radius: 100px;
-            width: fit-content;
-        }
-
-        .tag-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
-        }
-
-        .home-title {
-            display: flex;
-            flex-direction: column;
-            font-family: var(--font-display);
-            font-weight: 800;
-            line-height: 0.95;
-            margin-bottom: 2.5rem;
-        }
-
-        .title-line {
-            font-size: clamp(3.5rem, 10vw, 9rem);
-            display: block;
-            color: var(--text);
-            white-space: nowrap;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-            opacity: 0;
-            transform: translateY(40px);
-            animation: slideUp 0.8s forwards;
-        }
-
-        .accent-line {
-            color: var(--accent);
-            animation-delay: 0.15s;
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .home-role {
-            font-family: var(--font-mono);
-            font-size: 1.8rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .role-bracket {
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        .role-cursor {
-            color: var(--accent);
-            animation: blink 1s infinite;
-            font-weight: 300;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .home-desc {
-            font-size: 1.7rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            max-width: 520px;
-            margin-bottom: 3rem;
-            word-break: break-word;
-        }
-
-        .home-actions {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .home-socials {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .home-socials a {
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.6rem;
-            transition: all 0.2s;
-        }
-
-        .home-socials a:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        /* CODE WINDOW */
-        .home-visual {
-            position: relative;
-        }
-
-        .code-window {
-            background: var(--bg-3);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
-            animation: floatUp 0.9s 0.3s both;
-        }
-
-        @keyframes floatUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .code-bar {
-            background: #1e1e1e;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
+        a {
+            color: var(--text-primary);
+            text-decoration: none;
             border-bottom: 1px solid var(--border);
+            transition: color 0.15s ease, border-color 0.15s ease;
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        a:hover {
+            color: var(--accent);
+            border-color: var(--accent);
         }
 
-        .dot.red {
-            background: #ff5f57;
-        }
-
-        .dot.yellow {
-            background: #febc2e;
-        }
-
-        .dot.green {
-            background: #28c840;
-        }
-
-        .file-name {
+        .mono {
             font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-left: auto;
+            font-size: 0.82rem;
+            letter-spacing: -0.01em;
         }
 
-        .code-content {
-            padding: 2.5rem;
+        code {
             font-family: var(--font-mono);
-            font-size: 1.35rem;
-            line-height: 1.8;
-            overflow-x: auto;
-        }
-
-        .c-kw {
-            color: #c792ea;
-        }
-
-        .c-fn {
-            color: #82aaff;
-        }
-
-        .c-str {
-            color: #c3e88d;
-        }
-
-        .c-num {
-            color: #f78c6c;
-        }
-
-        .c-comment {
-            color: #546e7a;
-            font-style: italic;
-        }
-
-        .c-type {
-            color: #ffcb6b;
-        }
-
-        .stat-card {
-            position: absolute;
-            background: var(--surface);
+            font-size: 0.85em;
+            background: var(--bg-surface);
+            color: var(--accent);
+            padding: 0.15em 0.4em;
+            border-radius: 2px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Subtle Dividers */
+        hr.rule {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 4.5rem 0;
+        }
+
+        hr.rule-subtle {
+            border: 0;
+            border-top: 1px dashed var(--border-subtle);
+            margin: 2.5rem 0;
+        }
+
+        /* ==========================================================================
+           NAVIGATION (MINIMAL & RESTRAINED)
+           ========================================================================== */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(32, 33, 31, 0.92);
             backdrop-filter: blur(8px);
-            animation: floatUp 1s both;
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 0;
         }
 
-        .stat-1 {
-            bottom: -20px;
-            left: -30px;
-            animation-delay: 0.5s;
-        }
-
-        .stat-2 {
-            top: -20px;
-            right: -20px;
-            animation-delay: 0.7s;
-        }
-
-        .stat-num {
-            font-family: var(--font-mono);
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== ABOUT ===== */
-        .about {
-            min-height: 100vh;
-            padding: 10rem 6%;
-            background: var(--bg-2);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8rem;
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--border);
         }
 
-        .about-left h2 {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 5vw, 6rem);
-            font-weight: 800;
-            line-height: 1.05;
-            margin-bottom: 2.5rem;
-            color: var(--text);
+        .nav-brand {
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        .about-left h2 span {
+        .nav-brand .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            border-bottom: none;
+            transition: color 0.15s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent);
         }
 
-        .about-left p {
-            font-size: 1.6rem;
-            color: var(--text-muted);
-            line-height: 1.8;
+        .nav-links .resume-btn {
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.65rem;
+            border-radius: 2px;
+            color: var(--text-primary);
+            background: var(--bg-surface);
+            transition: all 0.15s ease;
+        }
+
+        .nav-links .resume-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ==========================================================================
+           HERO & PERSONAL INTRODUCTION (LEFT-ALIGNED, EDITORIAL)
+           ========================================================================== */
+        .hero-section {
+            padding-top: 5rem;
+            margin-bottom: 4.5rem;
+        }
+
+        .hero-meta-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.18;
+            color: var(--text-primary);
             margin-bottom: 1.8rem;
+            max-width: 820px;
         }
 
-        .about-actions {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .exp-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 2rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2.5rem;
-            margin-bottom: 1.5rem;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .exp-card:hover {
-            border-color: rgba(167, 139, 250, 0.3);
-            transform: translateX(6px);
-        }
-
-        .exp-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--accent-glow);
-            border: 1px solid rgba(167, 139, 250, 0.3);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.8rem;
-            flex-shrink: 0;
-        }
-
-        .exp-card h4 {
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.3rem;
-        }
-
-        .exp-card p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            margin-bottom: 0.3rem;
-        }
-
-        .exp-card span {
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
+        .hero-title em {
+            font-style: italic;
             color: var(--accent);
         }
 
-        /* ===== SKILLS ===== */
-        .skills {
-            padding: 10rem 6%;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 3rem;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .skill-category:hover {
-            border-color: rgba(167, 139, 250, 0.3);
-            transform: translateY(-4px);
-        }
-
-        .skill-cat-header {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
+        .hero-summary {
+            font-size: 1.12rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-width: 740px;
             margin-bottom: 2rem;
         }
 
-        .skill-cat-header i {
-            font-size: 2.4rem;
+        .hero-summary strong {
+            color: var(--text-primary);
+        }
+
+        .hero-spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-top: 2.25rem;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .spec-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .spec-val {
+            font-family: var(--font-sans);
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+
+        .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        /* ==========================================================================
+           SECTION HEADINGS (EDITORIAL & RESTRAINED)
+           ========================================================================== */
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-index-tag {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.65rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 0.35rem;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           OPEN PROJECT LIST (NO ENCLOSING CARDS, SUBTLE SEPARATORS)
+           ========================================================================== */
+        .projects-open-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-record {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .project-record:last-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .project-meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .project-meta-pill .id-code {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .project-status {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+        }
+
+        .project-title {
+            font-family: var(--font-serif);
+            font-size: 2.15rem;
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.015em;
+        }
+
+        .project-tagline {
+            font-family: var(--font-sans);
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 1.75rem;
+        }
+
+        /* Technical Breakdown Layout */
+        .project-details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .case-subheading {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .case-subheading::before {
+            content: "—";
             color: var(--accent);
         }
 
-        .skill-cat-header h4 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text);
+        .case-text {
+            color: var(--text-secondary);
+            font-size: 0.96rem;
+            line-height: 1.7;
+            margin-bottom: 1.15rem;
         }
 
-        .skill-tags {
+        /* Architecture Typography Diagram (Subtle, Clean Box) */
+        .arch-diagram-box {
+            background: var(--bg-surface-subtle);
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--accent);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .diagram-header {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .diagram-content {
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            line-height: 1.45;
+            color: var(--text-primary);
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .diagram-caption {
+            margin-top: 0.85rem;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 0.6rem;
+        }
+
+        /* Engineering Decisions Strip */
+        .decisions-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin: 1.25rem 0;
+        }
+
+        .decision-block {
+            padding: 1rem 1.2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+        }
+
+        .decision-block-title {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.45rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .decision-block-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 0;
+        }
+
+        /* Technical Trade-Offs Block */
+        .tradeoff-section {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .tradeoff-row {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .tradeoff-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .tradeoff-heading {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+        }
+
+        .tradeoff-body {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .tradeoff-body strong {
+            color: var(--accent);
+        }
+
+        /* Technology Pills */
+        .tech-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
+            gap: 0.45rem;
+            margin-top: 1rem;
         }
 
-        .skill-tags span {
+        .tech-item {
             font-family: var(--font-mono);
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            background: var(--bg-3);
+            font-size: 0.72rem;
+            background: var(--bg-surface);
             border: 1px solid var(--border);
-            padding: 0.4rem 1rem;
-            border-radius: 4px;
-            transition: all 0.2s;
+            color: var(--text-secondary);
+            padding: 0.2rem 0.55rem;
+            border-radius: 2px;
         }
 
-        .skill-tags span:hover {
+        /* Links Bar */
+        .project-links-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.25rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .project-links-bar a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--text-primary);
+        }
+
+        .project-links-bar a:hover {
             color: var(--accent);
-            border-color: rgba(167, 139, 250, 0.4);
         }
 
-        /* ===== EXPERIENCE ===== */
-        .experience {
-            padding: 10rem 6%;
-            background: var(--bg-2);
+        /* ==========================================================================
+           EXPERIENCE & TECHNICAL FOCUS (OPEN EDITORIAL LIST)
+           ========================================================================== */
+        .experience-section {
+            margin-bottom: 4.5rem;
+        }
+
+        .exp-item {
+            padding: 2.25rem 0;
             border-top: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
         }
 
-        .experience-timeline {
-            max-width: 900px;
+        .exp-item:last-child {
+            border-bottom: 1px solid var(--border);
         }
 
-        .timeline-item {
-            position: relative;
-            padding-left: 3rem;
-            padding-bottom: 3rem;
-            border-left: 2px solid var(--border);
-        }
-
-        .timeline-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -7px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--accent);
-            border: 2px solid var(--bg-2);
-        }
-
-        .timeline-item .timeline-date {
+        .exp-timeline {
             font-family: var(--font-mono);
-            font-size: 1.2rem;
+            font-size: 0.78rem;
             color: var(--accent);
-            margin-bottom: 0.8rem;
         }
 
-        .timeline-item h3 {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.3rem;
+        .exp-role {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
         }
 
-        .timeline-item .timeline-company {
-            font-size: 1.5rem;
-            color: var(--text-dim);
-            margin-bottom: 0.3rem;
-        }
-
-        .timeline-item .timeline-location {
+        .exp-org {
             font-family: var(--font-mono);
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.15rem;
         }
 
-        .timeline-item ul {
+        .exp-bullet-list {
             list-style: none;
             padding: 0;
         }
 
-        .timeline-item ul li {
+        .exp-bullet-list li {
             position: relative;
-            padding-left: 1.8rem;
-            font-size: 1.4rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 0.8rem;
+            padding-left: 1.2rem;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 0.65rem;
         }
 
-        .timeline-item ul li::before {
-            content: '▹';
+        .exp-bullet-list li::before {
+            content: "—";
             position: absolute;
             left: 0;
             top: 0;
-            color: var(--accent);
-            font-size: 1.4rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
         }
 
-        /* ===== PROJECTS ===== */
-        .projects-section {
-            padding: 10rem 6%;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
-        }
-
-        .projects-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .project-item {
-            position: relative;
+        /* Technical Interests Grid */
+        .interests-grid {
             display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 4rem;
-            padding: 4rem 0;
-            border-bottom: 1px solid var(--border);
-            transition: all 0.3s;
-            overflow: hidden;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
 
-        .project-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 0;
-            height: 100%;
-            background: var(--accent-glow);
-            transition: width 0.4s ease;
-            z-index: 0;
+        .interest-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 1.35rem;
+            border-radius: 2px;
         }
 
-        .project-item:hover::before {
-            width: 100%;
-        }
-
-        .project-item:hover {
-            padding-left: 2rem;
-        }
-
-        .project-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            position: relative;
-            z-index: 1;
-            padding-top: 0.5rem;
-        }
-
-        .project-num {
+        .interest-num {
             font-family: var(--font-mono);
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--border);
-            line-height: 1;
-            transition: color 0.3s;
-        }
-
-        .project-item:hover .project-num {
+            font-size: 0.7rem;
             color: var(--accent);
-        }
-
-        .project-type {
-            font-family: var(--font-mono);
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .project-body {
-            position: relative;
-            z-index: 1;
-        }
-
-        .project-body h3 {
-            font-family: var(--font-display);
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--text);
+            letter-spacing: 0.08em;
             margin-bottom: 0.5rem;
-            transition: color 0.3s;
         }
 
-        .project-item:hover .project-body h3 {
-            color: var(--accent);
+        .interest-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
         }
 
-        .project-subtitle {
-            font-size: 1.4rem;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            font-family: var(--font-mono);
+        .interest-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0;
         }
 
-        .project-desc {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 2rem;
-            max-width: 700px;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .project-tech span {
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            color: var(--accent);
-            background: rgba(167, 139, 250, 0.1);
-            border: 1px solid rgba(167, 139, 250, 0.2);
-            padding: 0.3rem 0.9rem;
-            border-radius: 4px;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .featured .project-body h3 {
-            font-size: 4.5rem;
-        }
-
-        /* ===== CONTACT ===== */
-        .contact {
-            padding: 10rem 6%;
-            background: var(--bg-2);
+        /* ==========================================================================
+           CONTACT (COMPACT, EDITORIAL, PRESERVED WEB3FORMS FUNCTIONALITY)
+           ========================================================================== */
+        .contact-section {
+            padding: 3.5rem 0 5rem 0;
             border-top: 1px solid var(--border);
         }
 
-        .contact-inner {
+        .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1.3fr;
-            gap: 8rem;
-            align-items: start;
+            gap: 3.5rem;
         }
 
-        .contact-left h2 {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 4.5vw, 5.5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            margin-bottom: 2rem;
-            color: var(--text);
-        }
-
-        .contact-left h2 span {
-            color: var(--accent);
-        }
-
-        .contact-left>p {
-            font-size: 1.7rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 3rem;
-        }
-
-        .contact-info {
+        .contact-coords {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1.5rem;
         }
 
-        .contact-info a,
-        .contact-info span {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            transition: color 0.2s;
-        }
-
-        .contact-info a:hover {
-            color: var(--accent);
-        }
-
-        .contact-info i {
-            color: var(--accent);
-            font-size: 1.6rem;
-            width: 20px;
-        }
-
-        .contact-form {
+        .coord-block {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 0.25rem;
+        }
+
+        .coord-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .coord-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .coord-value a {
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Form Styling */
+        .compact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.15rem;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 1rem;
         }
 
-        .form-group {
+        .form-field {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.35rem;
         }
 
-        .form-group label {
+        .form-field label {
             font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
+            font-size: 0.7rem;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
         }
 
-        .form-group input,
-        .form-group textarea {
-            background: var(--surface);
+        .form-field input,
+        .form-field textarea {
+            background: var(--bg-surface);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 1.5rem 1.8rem;
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            color: var(--text);
-            transition: border-color 0.2s;
-            resize: none;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            padding: 0.65rem 0.8rem;
+            border-radius: 2px;
+            transition: border-color 0.15s ease, background 0.15s ease;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .form-field input:focus,
+        .form-field textarea:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(167, 139, 250, 0.03);
+            background: var(--bg-surface-subtle);
         }
 
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: var(--text-muted);
+        .form-field textarea {
+            resize: vertical;
+            min-height: 95px;
         }
 
-        .send-btn {
-            width: 100%;
-            justify-content: center;
-            font-size: 1.5rem;
-            padding: 1.8rem;
+        .form-submit-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 0.35rem;
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: #1A1B19;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border: 1px solid var(--accent);
+            padding: 0.65rem 1.35rem;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: opacity 0.15s ease, background 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.92;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .form-status {
             font-family: var(--font-mono);
-            font-size: 1.3rem;
-            color: var(--green);
-            text-align: center;
-            min-height: 2rem;
+            font-size: 0.78rem;
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            padding: 5rem 6%;
-            border-top: 1px solid var(--border);
-            background: var(--bg);
-        }
-
-        .footer-inner {
+        /* Footer */
+        .site-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 2.25rem 0 3.5rem 0;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .footer-inner p {
-            font-size: 1.4rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
             color: var(--text-muted);
         }
 
-        .footer-socials {
+        .footer-nav {
             display: flex;
             gap: 1.5rem;
         }
 
-        .footer-socials a {
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.6rem;
-            transition: all 0.2s;
+        .footer-nav a {
+            color: var(--text-secondary);
+            border-bottom: none;
         }
 
-        .footer-socials a:hover {
-            border-color: var(--accent);
+        .footer-nav a:hover {
             color: var(--accent);
-            transform: translateY(-3px);
         }
 
-        .footer-copy {
-            font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--text-muted) !important;
-        }
-
-        /* ===== RESPONSIVE ===== */
-
-        /* Tablet */
-        @media (max-width: 1100px) {
-            .home {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-                padding-top: 13rem;
-            }
-
-            .about,
-            .contact-inner {
-                grid-template-columns: 1fr;
-                gap: 5rem;
-            }
-
-            .home-visual {
-                display: none;
-            }
-
-            .home-desc {
-                max-width: 100%;
-            }
-
-            .skills-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .project-item {
-                grid-template-columns: 80px 1fr;
-                gap: 2rem;
-            }
-
-            .about-right {
-                max-width: 100%;
-            }
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            html {
-                font-size: 55%;
-            }
-
+        /* ==========================================================================
+           REDUCED MOTION & RESPONSIVE BEHAVIOR
+           ========================================================================== */
+        @media (prefers-reduced-motion: reduce) {
             * {
-                max-width: 100%;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
             }
 
-            img,
-            video,
-            iframe,
-            pre {
-                max-width: 100%;
-            }
-
-            /* Header */
-            #header {
-                padding: 1.4rem 5%;
-            }
-
-            #menu-icon {
-                display: block;
-                cursor: pointer;
-            }
-
-            .navbar {
-                position: absolute;
-                top: 100%;
-                right: 0;
-                width: 75%;
-                background: rgba(8, 8, 8, 0.98);
-                border-left: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-                flex-direction: column;
-                gap: 0;
-                display: none;
-                padding: 1.5rem 2rem;
-                box-shadow: -8px 8px 30px rgba(0, 0, 0, 0.6);
-                max-width: 75vw;
-            }
-
-            .navbar.active {
-                display: flex;
-            }
-
-            .navbar a {
-                padding: 1.5rem 0;
-                font-size: 1.6rem;
-                border-bottom: 1px solid var(--border);
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .navbar a:last-child {
-                border-bottom: none;
-            }
-
-            .header-cta {
-                display: none;
-            }
-
-            /* Home */
-            .home {
+            .exp-item {
                 grid-template-columns: 1fr;
-                padding: 11rem 5% 6rem;
-                text-align: center;
-                gap: 3rem;
-                min-height: auto;
+                gap: 0.75rem;
             }
 
-            .home-content {
-                width: 100%;
-            }
-
-            .home-tag {
-                margin: 0 auto 2rem;
-                max-width: fit-content;
-            }
-
-            .home-title {
-                align-items: center;
-                margin-bottom: 2rem;
-            }
-
-            .title-line {
-                font-size: clamp(3.8rem, 12vw, 6rem);
-                white-space: normal;
-                word-break: break-word;
-            }
-
-            .home-role {
-                justify-content: center;
-                font-size: 1.4rem;
-                flex-wrap: wrap;
-                gap: 0.2rem;
-                margin-bottom: 2rem;
-            }
-
-            .home-desc {
-                font-size: 1.45rem;
-                margin: 0 auto 2.5rem;
-                max-width: 100%;
-                text-align: center;
-            }
-
-            .home-actions {
-                justify-content: center;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.2rem;
-                margin-bottom: 3rem;
-            }
-
-            .home-actions .btn-primary,
-            .home-actions .btn-ghost {
-                width: 100%;
-                justify-content: center;
-                max-width: 320px;
-            }
-
-            .home-socials {
-                justify-content: center;
-            }
-
-            /* About */
-            .about {
-                padding: 8rem 5%;
+            .contact-grid {
                 grid-template-columns: 1fr;
-                gap: 4rem;
-                text-align: center;
-            }
-
-            .about-left h2 {
-                font-size: clamp(3rem, 9vw, 5rem);
-                text-align: center;
-            }
-
-            .about-left p {
-                font-size: 1.45rem;
-                text-align: left;
-            }
-
-            .about-actions {
-                justify-content: center;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .about-actions .btn-primary,
-            .about-actions .btn-ghost {
-                width: 100%;
-                justify-content: center;
-                max-width: 320px;
-            }
-
-            .exp-card {
-                padding: 2rem;
-                gap: 1.5rem;
-            }
-
-            .exp-card:hover {
-                transform: none;
-            }
-
-            .exp-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.5rem;
-                flex-shrink: 0;
-            }
-
-            .exp-card h4 {
-                font-size: 1.5rem;
-            }
-
-            .exp-card p {
-                font-size: 1.2rem;
-            }
-
-            /* Skills */
-            .skills {
-                padding: 8rem 5%;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .skill-category {
-                padding: 2.2rem;
-            }
-
-            .skill-cat-header h4 {
-                font-size: 1.6rem;
-            }
-
-            .skill-tags span {
-                font-size: 1.1rem;
-            }
-
-            /* Section headers */
-            .section-header {
-                margin-bottom: 4rem;
-                text-align: center;
-            }
-
-            .section-header h2 {
-                font-size: clamp(3rem, 9vw, 5rem);
-            }
-
-            .section-header .about-badge {
-                display: block;
-                text-align: center;
-            }
-
-            /* Experience */
-            .experience {
-                padding: 8rem 5%;
-            }
-
-            .timeline-item h3 {
-                font-size: 1.8rem;
-            }
-
-            .timeline-item ul li {
-                font-size: 1.3rem;
-            }
-
-            /* Projects */
-            .projects-section {
-                padding: 8rem 5%;
-            }
-
-            .projects-list {
-                gap: 0;
-            }
-
-            .project-item {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-                padding: 3rem 0;
-                overflow: visible;
-            }
-
-            .project-item::before {
-                display: none;
-            }
-
-            .project-item:hover {
-                padding-left: 0;
-            }
-
-            .project-meta {
-                flex-direction: row;
-                align-items: center;
-                gap: 1.5rem;
-            }
-
-            .project-num {
-                font-size: 2rem;
-            }
-
-            .project-type {
-                font-size: 0.95rem;
-            }
-
-            .project-body h3 {
-                font-size: 2.6rem;
-                word-break: break-word;
-            }
-
-            .featured .project-body h3 {
-                font-size: 2.8rem;
-            }
-
-            .project-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .project-desc {
-                font-size: 1.35rem;
-                max-width: 100%;
-            }
-
-            .project-tech span {
-                font-size: 1rem;
-            }
-
-            .project-links {
-                flex-wrap: wrap;
-            }
-
-            .project-links .btn-primary {
-                font-size: 1.2rem;
-                padding: 1rem 2rem;
-            }
-
-            /* Contact */
-            .contact {
-                padding: 8rem 5%;
-            }
-
-            .contact-inner {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .contact-left h2 {
-                font-size: clamp(3rem, 9vw, 5rem);
-            }
-
-            .contact-left>p {
-                font-size: 1.45rem;
-            }
-
-            .contact-info a,
-            .contact-info span {
-                font-size: 1.35rem;
+                gap: 2.5rem;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
-                gap: 2rem;
             }
 
-            .form-group input,
-            .form-group textarea {
-                font-size: 1.4rem;
-                padding: 1.3rem 1.5rem;
-            }
-
-            .send-btn {
-                padding: 1.6rem;
-                font-size: 1.4rem;
-            }
-
-            /* Footer */
-            .footer {
-                padding: 4rem 5%;
-            }
-
-            .footer-inner {
-                gap: 1.5rem;
-            }
-
-            .footer-inner p {
-                font-size: 1.3rem;
-            }
-
-            .footer-copy {
-                font-size: 1.1rem !important;
-            }
-        }
-
-        /* Small phones */
-        @media (max-width: 430px) {
-            html {
-                font-size: 52%;
-            }
-
-            #header {
-                padding: 1.2rem 4%;
-            }
-
-            .home {
-                padding: 10rem 4% 5rem;
-            }
-
-            .title-line {
-                font-size: clamp(3.5rem, 13vw, 5.5rem);
-                white-space: normal;
-            }
-
-            .home-role {
-                font-size: 1.3rem;
-            }
-
-            .home-desc {
-                font-size: 1.35rem;
-            }
-
-            .about {
-                padding: 7rem 4%;
-            }
-
-            .skills {
-                padding: 7rem 4%;
-            }
-
-            .experience {
-                padding: 7rem 4%;
-            }
-
-            .projects-section {
-                padding: 7rem 4%;
-            }
-
-            .contact {
-                padding: 7rem 4%;
-            }
-
-            .exp-card {
-                padding: 1.8rem;
-            }
-
-            .skill-category {
-                padding: 2rem;
-            }
-
-            .project-body h3 {
-                font-size: 2.2rem;
-            }
-
-            .featured .project-body h3 {
-                font-size: 2.4rem;
-            }
-
-            .section-header h2 {
-                font-size: clamp(2.8rem, 9vw, 4.5rem);
+            .nav-links {
+                gap: 1.15rem;
             }
         }
     </style>
@@ -1621,538 +904,618 @@
 
 <body>
 
-    <div class="noise"></div>
+    <!-- Minimal Sticky Navigation -->
+    <header class="nav-header">
+        <div class="container nav-inner">
+            <a href="#top" class="nav-brand">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Muhammed Fazal</span>
+            </a>
 
-    <!-- ===== HEADER ===== -->
-    <header id="header">
-        <a href="#home" class="logo">F<span class="logo-dot">.</span></a>
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
-        <nav class="navbar" id="navbar">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#skills">Skills</a>
-            <a href="#experience">Experience</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
-        </nav>
-        <a href="#contact" class="header-cta">Let's Talk <i class="fa-solid fa-arrow-right"></i></a>
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="#overview">Overview</a>
+                <a href="#projects">Projects</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
+                <a href="https://drive.google.com/file/d/1FAqzVAb4eYqLD4Ok16h81f2xKauBge6K/view?usp=sharing"
+                    target="_blank" rel="noopener noreferrer" class="resume-btn">Resume ↗</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- ===== HOME / HERO ===== -->
-    <section class="home" id="home">
-        <div class="home-grid-lines"></div>
-        <div class="home-content">
-            <div class="home-tag">
-                <span class="tag-dot"></span> Open to opportunities
+    <main class="container" id="top">
+
+        <!-- ==================================================================
+             HERO & INTRODUCTION (LEFT-ALIGNED, RESTRAINED, TECHNICAL)
+             ================================================================== -->
+        <section class="hero-section" id="overview">
+            <div class="hero-meta-label">
+                <span>Engineering Profile & Technical Record</span>
+                <span>//</span>
+                <span>Go (Golang) Systems</span>
             </div>
-            <h1 class="home-title">
-                <!-- <span class="title-line">Muhammed</span> -->
-                <span class="title-line accent-line">Fazal</span>
+
+            <h1 class="hero-title">
+                Building backend architectures, concurrent pipelines, and <em>systems engineered for reliability</em>.
             </h1>
-            <div class="home-role">
-                <span class="role-bracket">&lt;</span>
-                <span class="role-text" id="typewriter"></span>
-                <span class="role-cursor">|</span>
-                <span class="role-bracket">/&gt;</span>
-            </div>
-            <p class="home-desc">Backend Engineer specializing in Go, building scalable microservices, distributed
-                systems, and high-performance APIs with PostgreSQL, Redis & Kafka.</p>
-            <div class="home-actions">
-                <a href="#projects" class="btn-primary">View Work</a>
-                <a href="#contact" class="btn-ghost">Get In Touch</a>
-            </div>
-            <div class="home-socials">
-                <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer"
-                    aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer"
-                    aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
-        </div>
-        <div class="home-visual">
-            <div class="code-window">
-                <div class="code-bar">
-                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-                    <span class="file-name">main.go</span>
+
+            <p class="hero-summary">
+                I am a backend engineer based in Kozhikode, India. My work centers on writing idiomatic Go to solve concrete distributed problems: transactional outbox workflows, asynchronous job queues, microservice event streaming, and resilient API gateways.
+            </p>
+
+            <div class="hero-spec-grid">
+                <div class="spec-item">
+                    <span class="spec-label">Primary Stack</span>
+                    <span class="spec-val">Go (Golang)</span>
                 </div>
-                <pre class="code-content"><code><span class="c-kw">package</span> main
-
-<span class="c-kw">import</span> (
-    <span class="c-str">"github.com/gofiber/fiber/v3"</span>
-    <span class="c-str">"github.com/jackc/pgx/v5"</span>
-)
-
-<span class="c-comment">// Clean Architecture + DI</span>
-<span class="c-kw">func</span> <span class="c-fn">main</span>() {
-    app := <span class="c-fn">fiber.New</span>()
-
-    <span class="c-comment">// Middleware stack</span>
-    app.<span class="c-fn">Use</span>(<span class="c-fn">cors</span>(), <span class="c-fn">rateLimit</span>())
-    app.<span class="c-fn">Use</span>(<span class="c-fn">jwtAuth</span>())
-
-    app.<span class="c-fn">Listen</span>(<span class="c-str">":8080"</span>)
-}</code></pre>
+                <div class="spec-item">
+                    <span class="spec-label">Storage & Streaming</span>
+                    <span class="spec-val">PostgreSQL, Redis, Kafka</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Architecture</span>
+                    <span class="spec-val">Hexagonal, Microservices, Outbox</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Current Role</span>
+                    <span class="spec-val">Developer Intern @ Bridgeon</span>
+                </div>
             </div>
-            <div class="stat-card stat-1">
-                <span class="stat-num">Go</span>
-                <span class="stat-label">Primary Lang</span>
-            </div>
-            <div class="stat-card stat-2">
-                <span class="stat-num">7+</span>
-                <span class="stat-label">Microservices</span>
-            </div>
-        </div>
-    </section>
 
-    <!-- ===== ABOUT ===== -->
-    <section class="about" id="about">
-        <div class="about-left reveal">
-            <span class="about-badge">About Me</span>
-            <h2>Building <span>scalable</span> backend systems.</h2>
-            <p>I'm a Backend Engineer specializing in Go, focused on building production-grade microservices,
-                event-driven architectures, and distributed systems. I have hands-on experience with PostgreSQL, Redis,
-                Kafka, gRPC, Docker, and AWS.</p>
-            <p>I care deeply about clean architecture, writing idiomatic Go, and designing systems that scale. From
-                double-entry ledger engines to async job queues with dead letter recovery — I enjoy solving hard
-                infrastructure problems.</p>
-            <div class="about-actions">
-                <a href="https://drive.google.com/file/d/1FAqzVAb4eYqLD4Ok16h81f2xKauBge6K/view?usp=sharing" target="_blank" class="btn-primary"><i
-                        class="fa-solid fa-download"></i> Resume</a>
-                <a href="https://github.com/muhammedfazall" target="_blank" class="btn-ghost"><i
-                        class="fa-brands fa-github"></i> GitHub</a>
+            <div class="hero-actions">
+                <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-github"></i> github.com/muhammedfazall ↗
+                </a>
+                <span style="color: var(--border);">|</span>
+                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-linkedin-in"></i> LinkedIn ↗
+                </a>
+                <span style="color: var(--border);">|</span>
+                <a href="mailto:fazalbkabeer@gmail.com">
+                    <i class="fa-solid fa-envelope"></i> fazalbkabeer@gmail.com
+                </a>
             </div>
-        </div>
-        <div class="about-right reveal reveal-delay-2">
-            <div class="exp-card">
-                <div class="exp-icon"><i class="fa-solid fa-briefcase"></i></div>
+        </section>
+
+        <!-- ==================================================================
+             PROJECTS (OPEN LIST, NO ENCLOSING CARDS, DETAILED CASE STUDIES)
+             ================================================================== -->
+        <section id="projects" style="margin-bottom: 5rem;">
+            <header class="section-header">
+                <div class="section-index-tag">[01] Engineering Case Studies</div>
+                <h2 class="section-title">Verified Systems & Workflows</h2>
+                <p class="section-desc">Technical breakdowns of production-grade architectures, decisions, and failure modes.</p>
+            </header>
+
+            <div class="projects-open-list">
+
+                <!-- -----------------------------------------------------------
+                     PROJECT 01: SENDR
+                     ----------------------------------------------------------- -->
+                <article class="project-record" id="sendr">
+                    <div class="project-header-row">
+                        <div class="project-meta-pill">
+                            <span class="id-code">RECORD: SENDR-01</span>
+                            <span>•</span>
+                            <span>Solo Backend System & CLI</span>
+                            <span>•</span>
+                            <span>Go 1.23</span>
+                        </div>
+                        <span class="project-status">Stable / Verified</span>
+                    </div>
+
+                    <h3 class="project-title">Sendr</h3>
+                    <div class="project-tagline">
+                        Transactional Email Delivery Platform & Developer CLI
+                    </div>
+
+                    <div class="project-details-grid">
+                        <div>
+                            <div class="case-subheading">System Overview & Problem</div>
+                            <p class="case-text">
+                                Direct synchronous mail transfer (via external SMTP relays or third-party HTTP endpoints) introduces unpredictable response latencies ranging from 400ms to 5,000ms. Under heavy traffic, remote provider timeouts and strict quota throttling (HTTP 429) cause web request backpressure and silent email loss.
+                            </p>
+                            <p class="case-text">
+                                <strong>Sendr</strong> solves this by decoupling request intake from actual mail delivery. Incoming requests are authenticated, validated against rate-limit buckets, and committed into a transactional PostgreSQL queue within 4ms. An internal pool of concurrent goroutine workers processes queued jobs in the background, enforcing exponential backoff retries and dead-letter queueing.
+                            </p>
+                        </div>
+
+                        <!-- Technical Flow Diagram -->
+                        <div class="arch-diagram-box">
+                            <div class="diagram-header">
+                                <span>INGESTION & DISPATCH PIPELINE</span>
+                                <span>[FLOW-DIAGRAM]</span>
+                            </div>
+                            <div class="diagram-content">
+[ Client / Cobra CLI ] 
+        | (HTTPS REST)
+        v
+[ Chi Router ] ---> [ Token-Bucket Rate Limiter ] ---> [ RS256 JWT & Redis Denylist ]
+        |
+        v
+[ Hexagonal Domain Core ]
+        |
+        v (Atomic Transaction)
+[ PostgreSQL: 'jobs' table ] <----------------------------------------+
+  (status: 'pending', retry_count: 0)                                 |
+        |                                                             |
+        | FOR UPDATE SKIP LOCKED                                      | (Transient Fail: Retry < 5)
+        v                                                             | Jittered Exponential Backoff
+[ Concurrent Goroutine Worker Pool ]                                  |
+  +-- Worker #1 ----> [ SMTP / SendGrid Relay ]                       |
+  +-- Worker #2 ----> [ SMTP / SendGrid Relay ] --(Network Error)-----+
+  +-- Worker #N ----> [ SMTP / SendGrid Relay ]
+                                       |
+                                       | (Max Retries Exhausted)
+                                       v
+                        [ Dead Letter Queue (DLQ) ]
+                        (status: 'failed', stack trace logged)</div>
+                            <div class="diagram-caption">
+                                Workers pull jobs concurrently using non-blocking row locks to prevent duplicate processing.
+                            </div>
+                        </div>
+
+                        <!-- Decisions Grid -->
+                        <div>
+                            <div class="case-subheading">Engineering Decisions</div>
+                            <div class="decisions-row">
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Hexagonal Architecture</div>
+                                    <p class="decision-block-desc">
+                                        Domain business logic has zero framework imports. Chi HTTP routing and Cobra CLI serve as driving adapters; PostgreSQL and SendGrid serve as driven adapters. Enables 100% deterministic offline testing.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Postgres SKIP LOCKED Queue</div>
+                                    <p class="decision-block-desc">
+                                        Leverages <code>SELECT ... FOR UPDATE SKIP LOCKED</code> instead of operating a dedicated message broker cluster. Job enqueueing executes in the same atomic database transaction as the business event.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">RS256 JWT + Redis Blacklist</div>
+                                    <p class="decision-block-desc">
+                                        Stateless RS256 token verification using asymmetric key pairs. Active sessions are validated against a Redis denylist to ensure immediate revocation upon logout or privilege modification.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Token-Bucket Rate Limiter</div>
+                                    <p class="decision-block-desc">
+                                        In-memory token bucket middleware evaluates per-API-key quotas to prevent downstream mail relay starvation and mitigate flood spikes before querying the database.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trade-offs -->
+                        <div class="tradeoff-section">
+                            <div class="tradeoff-row">
+                                <div class="tradeoff-heading">Trade-off: Relational Job Queue vs. Dedicated Broker</div>
+                                <div class="tradeoff-body">
+                                    <strong>Context:</strong> Dedicated message brokers like RabbitMQ or Kafka offer higher throughput, but introduce distributed state and dual-write complexity. By utilizing PostgreSQL row locking, Sendr eliminates dual-write failures at the cost of requiring autovacuum tuning for high-churn queue tables.
+                                </div>
+                            </div>
+                            <div class="tradeoff-row">
+                                <div class="tradeoff-heading">Challenge: Worker Pool Graceful Termination</div>
+                                <div class="tradeoff-body">
+                                    <strong>Context:</strong> Uncontrolled worker shutdown drops active socket connections mid-dispatch. Sendr intercepts <code>SIGTERM</code>/<code>SIGINT</code> signals, halts queue polling, and utilizes a <code>sync.WaitGroup</code> with a 15-second context deadline to guarantee in-flight emails either complete cleanly or roll back.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="case-subheading">Technologies Used</div>
+                            <div class="tech-list">
+                                <span class="tech-item">Go 1.23</span>
+                                <span class="tech-item">Chi Router</span>
+                                <span class="tech-item">PostgreSQL</span>
+                                <span class="tech-item">Redis</span>
+                                <span class="tech-item">Cobra CLI</span>
+                                <span class="tech-item">Docker</span>
+                                <span class="tech-item">AWS EC2</span>
+                                <span class="tech-item">SendGrid API</span>
+                                <span class="tech-item">Razorpay</span>
+                            </div>
+                        </div>
+
+                        <div class="project-links-bar">
+                            <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">
+                                <i class="fa-brands fa-github"></i> View Sendr Repository ↗
+                            </a>
+                            <span class="mono" style="font-size: 0.72rem; color: var(--text-muted);">
+                                Status: Unit Tested & Dockerized
+                            </span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- -----------------------------------------------------------
+                     PROJECT 02: MONEYMATE
+                     ----------------------------------------------------------- -->
+                <article class="project-record" id="moneymate">
+                    <div class="project-header-row">
+                        <div class="project-meta-pill">
+                            <span class="id-code">RECORD: MM-02</span>
+                            <span>•</span>
+                            <span>Distributed Financial Architecture</span>
+                            <span>•</span>
+                            <span>Go (Fiber v3)</span>
+                        </div>
+                        <span class="project-status">Core Monorepo Implemented</span>
+                    </div>
+
+                    <h3 class="project-title">MoneyMate</h3>
+                    <div class="project-tagline">
+                        7-Service Financial Microservices Monorepo & Double-Entry Ledger
+                    </div>
+
+                    <div class="project-details-grid">
+                        <div>
+                            <div class="case-subheading">System Overview & Architecture</div>
+                            <p class="case-text">
+                                In financial applications, mutable balance counters (e.g. <code>UPDATE accounts SET balance = balance + 100</code>) lead to race conditions, currency rounding discrepancies, and irrecoverable audit failures. <strong>MoneyMate</strong> is an event-driven financial platform engineered around an immutable double-entry bookkeeping engine and a decoupled 7-service Go monorepo architecture.
+                            </p>
+                            <p class="case-text">
+                                The system divides responsibility across 7 focused microservices:
+                            </p>
+                            <ul style="margin-left: 1.25rem; margin-bottom: 1.25rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65;">
+                                <li><strong>API Gateway:</strong> TLS termination, reverse proxy routing, and W3C distributed trace context propagation.</li>
+                                <li><strong>Auth Service:</strong> Argon2id password hashing, session tokens, and role-based access control (RBAC).</li>
+                                <li><strong>Payment Engine:</strong> Immutable double-entry ledger where every transaction enforces equal debit and credit journal entries.</li>
+                                <li><strong>Merchant Service:</strong> Merchant account lifecycle, commission schemas, and settlement records.</li>
+                                <li><strong>Rewards Service:</strong> Asynchronous consumer calculating cashback bonuses from completed payment events.</li>
+                                <li><strong>Notification Service:</strong> Dispatches transaction confirmations and alerts via background Kafka topic consumption.</li>
+                                <li><strong>Support Service:</strong> Dispute logging against immutable ledger transaction IDs.</li>
+                            </ul>
+                            <p class="case-text" style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
+                                * Scope note: Advanced concepts like automated multi-jurisdiction tax filings and cross-currency FX arbitrage routing are deferred to future research phases and are not presented as completed features.
+                            </p>
+                        </div>
+
+                        <!-- Technical Architecture Diagram -->
+                        <div class="arch-diagram-box">
+                            <div class="diagram-header">
+                                <span>TRANSACTIONAL OUTBOX & KAFKA TOPOLOGY</span>
+                                <span>[EVENT-DRIVEN-FLOW]</span>
+                            </div>
+                            <div class="diagram-content">
+[ Client / Webhook ] 
+        | (HTTP)
+        v
+[ API Gateway (Fiber v3) ]
+        |
+        v
+[ Payment Engine ] =================================================+
+  |                                                                  |
+  |-- BEGIN TRANSACTION (PostgreSQL pgx)                             |
+  |     |                                                            |
+  |     |--> 1. Insert into 'ledger_entries' (Credit + Debit)        | [ Atomic Database
+  |     |--> 2. Verify sum(Debits) - sum(Credits) == 0               |   Commit Boundary ]
+  |     |--> 3. Write event to 'outbox_events' (status: 'pending')   |
+  |     |                                                            |
+  |-- COMMIT TRANSACTION ============================================+
+        |
+        v
+[ Outbox Background Relay ]
+  (Polls unpublished outbox records)
+        |
+        v (Publishes Message)
+[ Apache Kafka Cluster ]
+  |-- Topic: 'payment.completed'
+        |
+        +---> [ Rewards Service ] -----> (Calculates Loyalty Points)
+        |
+        +---> [ Notification Service ] -> (Dispatches Email Receipt)
+        |
+        +---> [ Merchant Service ] ----> (Updates Settlement Ledger)</div>
+                            <div class="diagram-caption">
+                                Solves the dual-write problem: ledger state and outbox events commit together atomically.
+                            </div>
+                        </div>
+
+                        <!-- Decisions Grid -->
+                        <div>
+                            <div class="case-subheading">Engineering Decisions</div>
+                            <div class="decisions-row">
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Double-Entry Bookkeeping</div>
+                                    <p class="decision-block-desc">
+                                        Money balances are never stored as a single mutable integer. Account balances are mathematically derived from an immutable stream of verified credit and debit ledger entries.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Zero-ORM with SQLC</div>
+                                    <p class="decision-block-desc">
+                                        Eliminated ORM overhead by writing hand-tuned SQL compiled into deterministic, type-safe Go code with <code>sqlc</code> and <code>pgx</code>. Catches syntax and type mismatches at build time.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">Transactional Outbox Pattern</div>
+                                    <p class="decision-block-desc">
+                                        Ensures at-least-once message delivery to Kafka without distributed two-phase commits. If the message broker is temporarily offline, database transactions still commit safely.
+                                    </p>
+                                </div>
+                                <div class="decision-block">
+                                    <div class="decision-block-title">OpenTelemetry Tracing</div>
+                                    <p class="decision-block-desc">
+                                        Instruments HTTP and gRPC request flows across microservices with W3C <code>traceparent</code> headers, giving visibility into cross-service latency and bottlenecks.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trade-offs -->
+                        <div class="tradeoff-section">
+                            <div class="tradeoff-row">
+                                <div class="tradeoff-heading">Trade-off: Monorepo vs. Multi-Repo for 7 Services</div>
+                                <div class="tradeoff-body">
+                                    <strong>Context:</strong> Managing 7 separate repositories requires tagging and versioning shared DTOs and protobuf definitions. Housing all 7 services in a single Go monorepo enables atomic multi-service refactors and unified CI/CD checks, while requiring strict package isolation rules to prevent leaky domain boundaries.
+                                </div>
+                            </div>
+                            <div class="tradeoff-row">
+                                <div class="tradeoff-heading">Challenge: Hot Merchant Account Lock Contention</div>
+                                <div class="tradeoff-body">
+                                    <strong>Context:</strong> Concurrent transactions paying the same popular merchant would serialize on row-level balance locks. Because the ledger is <em>append-only</em>, write operations only insert new journal rows without locking the merchant's aggregate balance, shifting calculation overhead to asynchronous read rollups.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="case-subheading">Technologies Used</div>
+                            <div class="tech-list">
+                                <span class="tech-item">Go (Fiber v3)</span>
+                                <span class="tech-item">PostgreSQL</span>
+                                <span class="tech-item">Apache Kafka</span>
+                                <span class="tech-item">Redis</span>
+                                <span class="tech-item">SQLC</span>
+                                <span class="tech-item">Docker</span>
+                                <span class="tech-item">OpenTelemetry</span>
+                                <span class="tech-item">Razorpay</span>
+                            </div>
+                        </div>
+
+                        <div class="project-links-bar">
+                            <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">
+                                <i class="fa-brands fa-github"></i> View MoneyMate Monorepo ↗
+                            </a>
+                            <span class="mono" style="font-size: 0.72rem; color: var(--text-muted);">
+                                7 Microservices • Monorepo Architecture
+                            </span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             EXPERIENCE & TECHNICAL INTERESTS (CLEAN OPEN STRUCTURE)
+             ================================================================== -->
+        <section class="experience-section" id="experience">
+            <header class="section-header">
+                <div class="section-index-tag">[02] Background & Focus</div>
+                <h2 class="section-title">Experience & Technical Domains</h2>
+                <p class="section-desc">Hands-on background in systems engineering and areas of current investigation.</p>
+            </header>
+
+            <div class="exp-item">
+                <div class="exp-timeline">Jun 2025 – Present</div>
                 <div>
-                    <h4>Full-Stack Developer Intern</h4>
-                    <p>Bridgeon Solutions, Kozhikode</p>
-                    <span>Jun 2025 – Present</span>
+                    <h3 class="exp-role">Full-Stack Developer Intern</h3>
+                    <div class="exp-org">Bridgeon Solutions • Kozhikode, India</div>
+                    <ul class="exp-bullet-list">
+                        <li>Engineered backend services and REST APIs in Go utilizing Clean Architecture and modular service patterns.</li>
+                        <li>Designed transactional workflows in PostgreSQL ensuring strict relational integrity and consistency.</li>
+                        <li>Implemented authentication pipelines using JWT, OAuth, refresh token rotation, and role-based access control (RBAC).</li>
+                        <li>Constructed concurrent asynchronous processing pipelines using goroutines, channels, and worker pools with context-based cancellation.</li>
+                        <li>Automated containerized deployments using Docker, GitHub Actions CI/CD pipelines, and AWS EC2 instances.</li>
+                    </ul>
                 </div>
             </div>
-            <div class="exp-card">
-                <div class="exp-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+
+            <div class="exp-item">
+                <div class="exp-timeline">2019 – 2022</div>
                 <div>
-                    <h4>Diploma in Electronics Engineering</h4>
-                    <p>JDT Islam Polytechnic College, Kozhikode</p>
-                    <span>2019 – 2022</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== SKILLS ===== -->
-    <section class="skills" id="skills">
-        <div class="section-header reveal">
-            <span class="about-badge">What I Work With</span>
-            <h2>Skills & Tools</h2>
-        </div>
-        <div class="skills-grid">
-            <div class="skill-category reveal">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-code"></i>
-                    <h4>Languages</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>Go (Golang)</span>
-                    <span>SQL</span>
-                    <span>JavaScript</span>
-                </div>
-            </div>
-            <div class="skill-category reveal reveal-delay-1">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-server"></i>
-                    <h4>Backend & Architecture</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>REST APIs</span>
-                    <span>gRPC</span>
-                    <span>Microservices</span>
-                    <span>Goroutines</span>
-                    <span>Channels</span>
-                    <span>Fiber</span>
-                    <span>Chi</span>
-                    <span>Gin</span>
-                    <span>Clean Architecture</span>
-                    <span>DI</span>
-                </div>
-            </div>
-            <div class="skill-category reveal reveal-delay-2">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-database"></i>
-                    <h4>Databases</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>PostgreSQL</span>
-                    <span>Redis</span>
-                    <span>SQLC</span>
-                    <span>Goose</span>
-                    <span>pgx</span>
-                    <span>Schema Design</span>
-                    <span>Query Optimization</span>
-                </div>
-            </div>
-            <div class="skill-category reveal">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-network-wired"></i>
-                    <h4>Distributed Systems</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>Kafka</span>
-                    <span>Event-Driven</span>
-                    <span>Outbox Pattern</span>
-                    <span>Job Queues</span>
-                    <span>Worker Pools</span>
-                    <span>DLQs</span>
-                    <span>Rate Limiting</span>
-                    <span>WebSockets</span>
-                </div>
-            </div>
-            <div class="skill-category reveal reveal-delay-1">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-cloud"></i>
-                    <h4>DevOps & Observability</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>Docker</span>
-                    <span>AWS EC2</span>
-                    <span>GitHub Actions</span>
-                    <span>CI/CD</span>
-                    <span>GoReleaser</span>
-                    <span>OpenTelemetry</span>
-                    <span>OTLP Tracing</span>
-                    <span>zerolog</span>
-                </div>
-            </div>
-            <div class="skill-category reveal reveal-delay-2">
-                <div class="skill-cat-header">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <h4>Auth & Security</h4>
-                </div>
-                <div class="skill-tags">
-                    <span>JWT</span>
-                    <span>OAuth</span>
-                    <span>SIWE</span>
-                    <span>API Keys</span>
-                    <span>AES-256-GCM</span>
-                    <span>RBAC</span>
-                    <span>Argon2id</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== EXPERIENCE ===== -->
-    <section class="experience" id="experience">
-        <div class="section-header reveal">
-            <span class="about-badge">Where I've Worked</span>
-            <h2>Experience</h2>
-        </div>
-        <div class="experience-timeline">
-            <div class="timeline-item reveal">
-                <div class="timeline-date">Jun 2025 – Present</div>
-                <h3>Full-Stack Developer Intern</h3>
-                <div class="timeline-company">Bridgeon Solutions</div>
-                <div class="timeline-location">Kozhikode, India</div>
-                <ul>
-                    <li>Developed backend services and REST APIs in Go using Clean Architecture and modular service
-                        design.</li>
-                    <li>Designed transactional workflows using PostgreSQL, ensuring data consistency and integrity.</li>
-                    <li>Implemented authentication and authorization using JWT, OAuth, refresh tokens, and role-based
-                        access controls.</li>
-                    <li>Built concurrent, asynchronous processing workflows using goroutines, channels, and background
-                        workers with context-based cancellation and timeout handling.</li>
-                    <li>Implemented deployment automation and CI/CD pipelines using GitHub Actions, and deployed
-                        containerized applications using Docker and AWS EC2.</li>
-                    <li>Debugged backend issues and collaborated through Git-based workflows, pull requests, code
-                        reviews, and sprint-based development.</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== PROJECTS ===== -->
-    <section class="projects-section" id="projects">
-        <div class="section-header reveal">
-            <span class="about-badge">What I've Built</span>
-            <h2>Projects</h2>
-        </div>
-        <div class="projects-list">
-            <div class="project-item featured reveal">
-                <div class="project-meta">
-                    <span class="project-num">01</span>
-                    <span class="project-type">Team Project</span>
-                </div>
-                <div class="project-body">
-                    <h3>MoneyMate</h3>
-                    <div class="project-subtitle">Personal Finance Platform — 7-Service Go Microservices Monorepo</div>
-                    <p class="project-desc">A production-grade personal finance platform with a 7-service Go
-                        microservices monorepo (auth, gateway, payment, merchant, rewards, notification, support).
-                        Features a double-entry-ledger wallet engine, Kafka event-driven workflows with outbox pattern,
-                        multi-tenant PostgreSQL schema, and OpenTelemetry distributed tracing.</p>
-                    <div class="project-tech">
-                        <span>Go</span>
-                        <span>Fiber v3</span>
-                        <span>PostgreSQL</span>
-                        <span>Redis</span>
-                        <span>Kafka</span>
-                        <span>SQLC</span>
-                        <span>Docker</span>
-                        <span>OpenTelemetry</span>
-                        <span>Razorpay</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/muhammedfazall" target="_blank" class="btn-primary"><i
-                                class="fa-brands fa-github"></i> GitHub</a>
-                    </div>
+                    <h3 class="exp-role">Diploma in Electronics Engineering</h3>
+                    <div class="exp-org">JDT Islam Polytechnic College • Kozhikode, India</div>
+                    <ul class="exp-bullet-list">
+                        <li>Foundational coursework in digital logic, microprocessors, signal timing, and low-level computer architecture.</li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="project-item reveal">
-                <div class="project-meta">
-                    <span class="project-num">02</span>
-                    <span class="project-type">Solo Project</span>
-                </div>
-                <div class="project-body">
-                    <h3>Sendr</h3>
-                    <div class="project-subtitle">Transactional Email Platform & Developer CLI</div>
-                    <p class="project-desc">A transactional email platform with hexagonal architecture, Google OAuth,
-                        RS256 JWT with refresh token rotation, and Redis-backed token blacklisting. Features a
-                        PostgreSQL async job queue with goroutine worker pool, exponential backoff retries, Dead Letter
-                        Queue, and a cross-platform CLI built with Cobra.</p>
-                    <div class="project-tech">
-                        <span>Go</span>
-                        <span>Chi</span>
-                        <span>PostgreSQL</span>
-                        <span>Redis</span>
-                        <span>Cobra</span>
-                        <span>Docker</span>
-                        <span>AWS EC2</span>
-                        <span>SendGrid</span>
-                        <span>Razorpay</span>
+            <!-- Technical Domains of Interest -->
+            <div style="margin-top: 3.5rem;">
+                <div class="case-subheading" style="margin-bottom: 1.25rem;">Areas of Active Technical Interest</div>
+                <div class="interests-grid">
+                    <div class="interest-card">
+                        <div class="interest-num">DOMAIN 01</div>
+                        <div class="interest-title">Reliability & Distributed Failures</div>
+                        <p class="interest-desc">
+                            Studying failure modes in asynchronous workflows: partition tolerance, dead-letter recovery strategies, exponential backoff with full jitter, and deterministic idempotency keys.
+                        </p>
                     </div>
-                    <div class="project-links">
-                        <a href="https://github.com/muhammedfazall" target="_blank" class="btn-primary"><i
-                                class="fa-brands fa-github"></i> GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- ===== CONTACT ===== -->
-    <section class="contact" id="contact">
-        <div class="contact-inner">
-            <div class="contact-left reveal">
-                <span class="about-badge">Get In Touch</span>
-                <h2>Let's build something <span>great</span> together.</h2>
-                <p>Have a project in mind, want to collaborate, or just want to say hello? I'd love to hear from you.
-                </p>
-                <div class="contact-info">
-                    <a href="mailto:fazalbkabeer@gmail.com"><i class="fa-solid fa-envelope"></i>
-                        fazalbkabeer@gmail.com</a>
-                    <span><i class="fa-solid fa-location-dot"></i> Kozhikode, India</span>
-                    <!-- <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank"><i class="fa-brands fa-linkedin-in"></i> linkedin.com/in/muhammedfazall</a>
-                <a href="https://github.com/muhammedfazall" target="_blank"><i class="fa-brands fa-github"></i> github.com/muhammedfazall</a> -->
-                </div>
-            </div>
-            <form class="contact-form reveal reveal-delay-2" id="contact-form" action="https://api.web3forms.com/submit"
-                method="POST">
-                <input type="hidden" name="access_key" value="2b122fca-fe20-4f33-ba69-032396eab5c8">
-                <input type="hidden" name="subject" value="New Contact from Portfolio">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="contact-name">Name</label>
-                        <input type="text" id="contact-name" name="name" placeholder="Your name" required>
+                    <div class="interest-card">
+                        <div class="interest-num">DOMAIN 02</div>
+                        <div class="interest-title">Type-Safe Relational Storage</div>
+                        <p class="interest-desc">
+                            Prioritizing compiled SQL tooling like SQLC over runtime reflection ORMs. Designing ACID-compliant schemas, indexing strategies for high-frequency queries, and transactional outbox tables.
+                        </p>
                     </div>
-                    <div class="form-group">
-                        <label for="contact-email">Email</label>
-                        <input type="email" id="contact-email" name="email" placeholder="Your email" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="contact-subject">Subject</label>
-                    <input type="text" id="contact-subject" name="subject_line" placeholder="What's this about?">
-                </div>
-                <div class="form-group">
-                    <label for="contact-message">Message</label>
-                    <textarea id="contact-message" name="message" rows="5" placeholder="Tell me about your project..."
-                        required></textarea>
-                </div>
-                <button type="submit" class="btn-primary send-btn">Send Message <i
-                        class="fa-solid fa-paper-plane"></i></button>
-                <div class="form-status" id="form-status"></div>
-            </form>
-        </div>
-    </div>
-</footer>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <a href="#home" class="logo">MF<span class="logo-dot">.</span></a>
-            <div class="footer-socials">
-                <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer"
-                    aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer"
-                    aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <div class="interest-card">
+                        <div class="interest-num">DOMAIN 03</div>
+                        <div class="interest-title">Go Concurrency Ergonomics</div>
+                        <p class="interest-desc">
+                            Structuring worker pools with strict lifecycle guarantees. Enforcing context propagation, zero-leak channel synchronization, and bounded goroutine memory footprints.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <p class="footer-copy">© 2025 Muhammed Fazal. Built with passion & Go.</p>
+        </section>
+
+        <!-- ==================================================================
+             COMPACT CONTACT SECTION (PRESERVED WEB3FORMS FUNCTIONALITY)
+             ================================================================== -->
+        <section class="contact-section" id="contact">
+            <header class="section-header" style="margin-bottom: 2rem;">
+                <div class="section-index-tag">[03] Communication</div>
+                <h2 class="section-title">Direct Contact</h2>
+                <p class="section-desc">Get in touch regarding backend engineering opportunities, architecture discussions, or collaboration.</p>
+            </header>
+
+            <div class="contact-grid">
+                <div class="contact-coords">
+                    <div class="coord-block">
+                        <span class="coord-label">Email Address</span>
+                        <span class="coord-value">
+                            <a href="mailto:fazalbkabeer@gmail.com">fazalbkabeer@gmail.com</a>
+                        </span>
+                    </div>
+
+                    <div class="coord-block">
+                        <span class="coord-label">Location Base</span>
+                        <span class="coord-value">Kozhikode, Kerala, India</span>
+                    </div>
+
+                    <div class="coord-block">
+                        <span class="coord-label">Code Repositories</span>
+                        <span class="coord-value">
+                            <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">github.com/muhammedfazall</a>
+                        </span>
+                    </div>
+
+                    <div class="coord-block">
+                        <span class="coord-label">Professional Profile</span>
+                        <span class="coord-value">
+                            <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer">linkedin.com/in/muhammedfazall</a>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Preserved Web3Forms Form -->
+                <div>
+                    <form class="compact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="2b122fca-fe20-4f33-ba69-032396eab5c8">
+                        <input type="hidden" name="subject" value="New Portfolio Message from Muhammed Fazal Portfolio">
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="Name or Organization" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="email">Your Email</label>
+                                <input type="email" id="email" name="email" placeholder="email@address.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="subject_line">Subject</label>
+                            <input type="text" id="subject_line" name="subject_line" placeholder="Backend Role / Architecture Inquiry">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Brief outline of your project, opportunity, or inquiry..." required></textarea>
+                        </div>
+
+                        <div class="form-submit-row">
+                            <button type="submit" class="btn-submit" id="submit-btn">
+                                <span>Send Message</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <span class="form-status" id="form-status"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Restrained Footer -->
+    <footer class="container">
+        <div class="site-footer">
+            <div>
+                © 2026 Muhammed Fazal • Go Backend Engineer
+            </div>
+            <div class="footer-nav">
+                <a href="#top">Back to Top ↑</a>
+                <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://drive.google.com/file/d/1FAqzVAb4eYqLD4Ok16h81f2xKauBge6K/view?usp=sharing" target="_blank" rel="noopener noreferrer">Resume</a>
+            </div>
         </div>
     </footer>
 
+    <!-- Functional Form Submission & Navigation Script -->
     <script>
-        // ===== MOBILE MENU =====
-        const menuIcon = document.querySelector('#menu-icon');
-        const navbar = document.querySelector('#navbar');
-
-        menuIcon.onclick = () => {
-            menuIcon.classList.toggle('fa-x');
-            navbar.classList.toggle('active');
-        };
-
-        // Close navbar on link click
-        document.querySelectorAll('#navbar a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuIcon.classList.remove('fa-x');
-                navbar.classList.remove('active');
-            });
-        });
-
-        // ===== HEADER SCROLL =====
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
-        });
-
-        // ===== ACTIVE NAV HIGHLIGHT =====
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('#navbar a');
-
-        function highlightNav() {
-            const scrollY = window.scrollY + 200;
-            sections.forEach(section => {
-                const top = section.offsetTop;
-                const height = section.offsetHeight;
-                const id = section.getAttribute('id');
-                const link = document.querySelector(`#navbar a[href="#${id}"]`);
-                if (link) {
-                    if (scrollY >= top && scrollY < top + height) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                }
-            });
-        }
-        window.addEventListener('scroll', highlightNav);
-        highlightNav();
-
-        // ===== TYPEWRITER =====
-        const roles = [
-            'Backend Engineer',
-            'Go Developer',
-            'Systems Architect',
-            'API Engineer',
-            'Microservices Dev'
-        ];
-        let roleIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typeEl = document.getElementById('typewriter');
-
-        function typeWriter() {
-            const current = roles[roleIndex];
-            if (isDeleting) {
-                typeEl.textContent = current.slice(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typeEl.textContent = current.slice(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === current.length) {
-                setTimeout(() => isDeleting = true, 2000);
-                setTimeout(typeWriter, 2100);
-                return;
-            }
-
-            if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                roleIndex = (roleIndex + 1) % roles.length;
-                setTimeout(typeWriter, 500);
-                return;
-            }
-
-            setTimeout(typeWriter, isDeleting ? 50 : 100);
-        }
-        typeWriter();
-
-        // ===== SCROLL REVEAL =====
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // ===== FORM SUBMISSION =====
-        const contactForm = document.getElementById('contact-form');
+        // Form submission with preserved Web3Forms configuration
+        const form = document.getElementById('contact-form');
         const formStatus = document.getElementById('form-status');
+        const submitBtn = document.getElementById('submit-btn');
 
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = contactForm.querySelector('.send-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
-
-            try {
-                const response = await fetch(contactForm.action, {
-                    method: 'POST',
-                    body: new FormData(contactForm)
-                });
-                const data = await response.json();
-
-                if (data.success) {
-                    formStatus.textContent = '✓ Message sent successfully!';
-                    formStatus.style.color = 'var(--green)';
-                    contactForm.reset();
-                } else {
-                    formStatus.textContent = '✗ Something went wrong. Please try again.';
-                    formStatus.style.color = '#ff5f57';
-                }
-            } catch (error) {
-                formStatus.textContent = '✗ Network error. Please try again.';
-                formStatus.style.color = '#ff5f57';
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
-
-            setTimeout(() => {
-                formStatus.textContent = '';
-            }, 5000);
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        if (form) {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form)
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        formStatus.textContent = '✓ Message received. I will reply shortly.';
+                        formStatus.style.color = 'var(--accent)';
+                        form.reset();
+                    } else {
+                        formStatus.textContent = '✗ Submission error. Email me directly at fazalbkabeer@gmail.com';
+                        formStatus.style.color = '#D9776E';
+                    }
+                } catch (error) {
+                    formStatus.textContent = '✗ Connection issue. Please email fazalbkabeer@gmail.com';
+                    formStatus.style.color = '#D9776E';
+                }
+
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+
+                setTimeout(() => {
+                    formStatus.textContent = '';
+                }, 7000);
+            });
+        }
+
+        // Active navigation link tracking
+        const navSections = document.querySelectorAll('section[id], header[id]');
+        const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const scrollY = window.pageYOffset + 100;
+
+            navSections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = '#' + section.id;
                 }
             });
-        });
-    </script>
 
+            navAnchors.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === current) {
+                    a.classList.add('active');
+                }
+            });
+        }, { passive: true });
+    </script>
 </body>
 
 </html>
