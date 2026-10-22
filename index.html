@@ -56,7 +56,9 @@
         }
 
         /* Reset & Defaults */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -81,7 +83,10 @@
         }
 
         /* Typography Hierarchy */
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             color: var(--text-primary);
             font-weight: 500;
             letter-spacing: -0.015em;
@@ -940,7 +945,9 @@
             </h1>
 
             <p class="hero-summary">
-                I am a backend engineer based in Kozhikode, India. My work centers on writing idiomatic Go to solve concrete distributed problems: transactional outbox workflows, asynchronous job queues, microservice event streaming, and resilient API gateways.
+                I am a backend engineer based in Kozhikode, India. My work centers on writing idiomatic Go to solve
+                concrete distributed problems: transactional outbox workflows, asynchronous job queues, microservice
+                event streaming, and resilient API gateways.
             </p>
 
             <div class="hero-spec-grid">
@@ -984,7 +991,8 @@
             <header class="section-header">
                 <div class="section-index-tag">[01] Engineering Case Studies</div>
                 <h2 class="section-title">Verified Systems & Workflows</h2>
-                <p class="section-desc">Technical breakdowns of production-grade architectures, decisions, and failure modes.</p>
+                <p class="section-desc">Technical breakdowns of production-grade architectures, decisions, and failure
+                    modes.</p>
             </header>
 
             <div class="projects-open-list">
@@ -1013,10 +1021,17 @@
                         <div>
                             <div class="case-subheading">System Overview & Problem</div>
                             <p class="case-text">
-                                Direct synchronous mail transfer (via external SMTP relays or third-party HTTP endpoints) introduces unpredictable response latencies ranging from 400ms to 5,000ms. Under heavy traffic, remote provider timeouts and strict quota throttling (HTTP 429) cause web request backpressure and silent email loss.
+                                Direct synchronous mail transfer (via external SMTP relays or third-party HTTP
+                                endpoints) introduces unpredictable response latencies ranging from 400ms to 5,000ms.
+                                Under heavy traffic, remote provider timeouts and strict quota throttling (HTTP 429)
+                                cause web request backpressure and silent email loss.
                             </p>
                             <p class="case-text">
-                                <strong>Sendr</strong> solves this by decoupling request intake from actual mail delivery. Incoming requests are authenticated, validated against rate-limit buckets, and committed into a transactional PostgreSQL queue within 4ms. An internal pool of concurrent goroutine workers processes queued jobs in the background, enforcing exponential backoff retries and dead-letter queueing.
+                                <strong>Sendr</strong> solves this by decoupling request intake from actual mail
+                                delivery. Incoming requests are authenticated, validated against rate-limit buckets, and
+                                committed into a transactional PostgreSQL queue within 4ms. An internal pool of
+                                concurrent goroutine workers processes queued jobs in the background, enforcing
+                                exponential backoff retries and dead-letter queueing.
                             </p>
                         </div>
 
@@ -1027,31 +1042,29 @@
                                 <span>[FLOW-DIAGRAM]</span>
                             </div>
                             <div class="diagram-content">
-[ Client / Cobra CLI ] 
-        | (HTTPS REST)
-        v
-[ Chi Router ] ---> [ Token-Bucket Rate Limiter ] ---> [ RS256 JWT & Redis Denylist ]
-        |
-        v
-[ Hexagonal Domain Core ]
-        |
-        v (Atomic Transaction)
-[ PostgreSQL: 'jobs' table ] <----------------------------------------+
-  (status: 'pending', retry_count: 0)                                 |
-        |                                                             |
-        | FOR UPDATE SKIP LOCKED                                      | (Transient Fail: Retry < 5)
-        v                                                             | Jittered Exponential Backoff
-[ Concurrent Goroutine Worker Pool ]                                  |
-  +-- Worker #1 ----> [ SMTP / SendGrid Relay ]                       |
-  +-- Worker #2 ----> [ SMTP / SendGrid Relay ] --(Network Error)-----+
-  +-- Worker #N ----> [ SMTP / SendGrid Relay ]
-                                       |
-                                       | (Max Retries Exhausted)
-                                       v
-                        [ Dead Letter Queue (DLQ) ]
-                        (status: 'failed', stack trace logged)</div>
+                                [ Client / Cobra CLI ]
+                                | (HTTPS REST)
+                                v
+                                [ Chi Router ] ---> [ Token-Bucket Rate Limiter ] ---> [ RS256 JWT & Redis Denylist ]
+                                |
+                                v
+                                [ Hexagonal Domain Core ]
+                                |
+                                v (Atomic Transaction)
+                                [ PostgreSQL: 'jobs' table ] <----------------------------------------+
+                                    (status: 'pending' , retry_count: 0) | | | | FOR UPDATE SKIP LOCKED | (Transient
+                                    Fail: Retry < 5) v | Jittered Exponential Backoff [ Concurrent Goroutine Worker Pool
+                                    ] | +-- Worker #1 ----> [ SMTP / SendGrid Relay ] |
+                                    +-- Worker #2 ----> [ SMTP / SendGrid Relay ] --(Network Error)-----+
+                                    +-- Worker #N ----> [ SMTP / SendGrid Relay ]
+                                    |
+                                    | (Max Retries Exhausted)
+                                    v
+                                    [ Dead Letter Queue (DLQ) ]
+                                    (status: 'failed', stack trace logged)</div>
                             <div class="diagram-caption">
-                                Workers pull jobs concurrently using non-blocking row locks to prevent duplicate processing.
+                                Workers pull jobs concurrently using non-blocking row locks to prevent duplicate
+                                processing.
                             </div>
                         </div>
 
@@ -1062,25 +1075,33 @@
                                 <div class="decision-block">
                                     <div class="decision-block-title">Hexagonal Architecture</div>
                                     <p class="decision-block-desc">
-                                        Domain business logic has zero framework imports. Chi HTTP routing and Cobra CLI serve as driving adapters; PostgreSQL and SendGrid serve as driven adapters. Enables 100% deterministic offline testing.
+                                        Domain business logic has zero framework imports. Chi HTTP routing and Cobra CLI
+                                        serve as driving adapters; PostgreSQL and SendGrid serve as driven adapters.
+                                        Enables 100% deterministic offline testing.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">Postgres SKIP LOCKED Queue</div>
                                     <p class="decision-block-desc">
-                                        Leverages <code>SELECT ... FOR UPDATE SKIP LOCKED</code> instead of operating a dedicated message broker cluster. Job enqueueing executes in the same atomic database transaction as the business event.
+                                        Leverages <code>SELECT ... FOR UPDATE SKIP LOCKED</code> instead of operating a
+                                        dedicated message broker cluster. Job enqueueing executes in the same atomic
+                                        database transaction as the business event.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">RS256 JWT + Redis Blacklist</div>
                                     <p class="decision-block-desc">
-                                        Stateless RS256 token verification using asymmetric key pairs. Active sessions are validated against a Redis denylist to ensure immediate revocation upon logout or privilege modification.
+                                        Stateless RS256 token verification using asymmetric key pairs. Active sessions
+                                        are validated against a Redis denylist to ensure immediate revocation upon
+                                        logout or privilege modification.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">Token-Bucket Rate Limiter</div>
                                     <p class="decision-block-desc">
-                                        In-memory token bucket middleware evaluates per-API-key quotas to prevent downstream mail relay starvation and mitigate flood spikes before querying the database.
+                                        In-memory token bucket middleware evaluates per-API-key quotas to prevent
+                                        downstream mail relay starvation and mitigate flood spikes before querying the
+                                        database.
                                     </p>
                                 </div>
                             </div>
@@ -1091,13 +1112,20 @@
                             <div class="tradeoff-row">
                                 <div class="tradeoff-heading">Trade-off: Relational Job Queue vs. Dedicated Broker</div>
                                 <div class="tradeoff-body">
-                                    <strong>Context:</strong> Dedicated message brokers like RabbitMQ or Kafka offer higher throughput, but introduce distributed state and dual-write complexity. By utilizing PostgreSQL row locking, Sendr eliminates dual-write failures at the cost of requiring autovacuum tuning for high-churn queue tables.
+                                    <strong>Context:</strong> Dedicated message brokers like RabbitMQ or Kafka offer
+                                    higher throughput, but introduce distributed state and dual-write complexity. By
+                                    utilizing PostgreSQL row locking, Sendr eliminates dual-write failures at the cost
+                                    of requiring autovacuum tuning for high-churn queue tables.
                                 </div>
                             </div>
                             <div class="tradeoff-row">
                                 <div class="tradeoff-heading">Challenge: Worker Pool Graceful Termination</div>
                                 <div class="tradeoff-body">
-                                    <strong>Context:</strong> Uncontrolled worker shutdown drops active socket connections mid-dispatch. Sendr intercepts <code>SIGTERM</code>/<code>SIGINT</code> signals, halts queue polling, and utilizes a <code>sync.WaitGroup</code> with a 15-second context deadline to guarantee in-flight emails either complete cleanly or roll back.
+                                    <strong>Context:</strong> Uncontrolled worker shutdown drops active socket
+                                    connections mid-dispatch. Sendr intercepts <code>SIGTERM</code>/<code>SIGINT</code>
+                                    signals, halts queue polling, and utilizes a <code>sync.WaitGroup</code> with a
+                                    15-second context deadline to guarantee in-flight emails either complete cleanly or
+                                    roll back.
                                 </div>
                             </div>
                         </div>
@@ -1152,22 +1180,38 @@
                         <div>
                             <div class="case-subheading">System Overview & Architecture</div>
                             <p class="case-text">
-                                In financial applications, mutable balance counters (e.g. <code>UPDATE accounts SET balance = balance + 100</code>) lead to race conditions, currency rounding discrepancies, and irrecoverable audit failures. <strong>MoneyMate</strong> is an event-driven financial platform engineered around an immutable double-entry bookkeeping engine and a decoupled 7-service Go monorepo architecture.
+                                In financial applications, mutable balance counters (e.g.
+                                <code>UPDATE accounts SET balance = balance + 100</code>) lead to race conditions,
+                                currency rounding discrepancies, and irrecoverable audit failures.
+                                <strong>MoneyMate</strong> is an event-driven financial platform engineered around an
+                                immutable double-entry bookkeeping engine and a decoupled 7-service Go monorepo
+                                architecture.
                             </p>
                             <p class="case-text">
                                 The system divides responsibility across 7 focused microservices:
                             </p>
-                            <ul style="margin-left: 1.25rem; margin-bottom: 1.25rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65;">
-                                <li><strong>API Gateway:</strong> TLS termination, reverse proxy routing, and W3C distributed trace context propagation.</li>
-                                <li><strong>Auth Service:</strong> Argon2id password hashing, session tokens, and role-based access control (RBAC).</li>
-                                <li><strong>Payment Engine:</strong> Immutable double-entry ledger where every transaction enforces equal debit and credit journal entries.</li>
-                                <li><strong>Merchant Service:</strong> Merchant account lifecycle, commission schemas, and settlement records.</li>
-                                <li><strong>Rewards Service:</strong> Asynchronous consumer calculating cashback bonuses from completed payment events.</li>
-                                <li><strong>Notification Service:</strong> Dispatches transaction confirmations and alerts via background Kafka topic consumption.</li>
-                                <li><strong>Support Service:</strong> Dispute logging against immutable ledger transaction IDs.</li>
+                            <ul
+                                style="margin-left: 1.25rem; margin-bottom: 1.25rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65;">
+                                <li><strong>API Gateway:</strong> TLS termination, reverse proxy routing, and W3C
+                                    distributed trace context propagation.</li>
+                                <li><strong>Auth Service:</strong> Argon2id password hashing, session tokens, and
+                                    role-based access control (RBAC).</li>
+                                <li><strong>Payment Engine:</strong> Immutable double-entry ledger where every
+                                    transaction enforces equal debit and credit journal entries.</li>
+                                <li><strong>Merchant Service:</strong> Merchant account lifecycle, commission schemas,
+                                    and settlement records.</li>
+                                <li><strong>Rewards Service:</strong> Asynchronous consumer calculating cashback bonuses
+                                    from completed payment events.</li>
+                                <li><strong>Notification Service:</strong> Dispatches transaction confirmations and
+                                    alerts via background Kafka topic consumption.</li>
+                                <li><strong>Support Service:</strong> Dispute logging against immutable ledger
+                                    transaction IDs.</li>
                             </ul>
-                            <p class="case-text" style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
-                                * Scope note: Advanced concepts like automated multi-jurisdiction tax filings and cross-currency FX arbitrage routing are deferred to future research phases and are not presented as completed features.
+                            <p class="case-text"
+                                style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
+                                * Scope note: Advanced concepts like automated multi-jurisdiction tax filings and
+                                cross-currency FX arbitrage routing are deferred to future research phases and are not
+                                presented as completed features.
                             </p>
                         </div>
 
@@ -1178,37 +1222,38 @@
                                 <span>[EVENT-DRIVEN-FLOW]</span>
                             </div>
                             <div class="diagram-content">
-[ Client / Webhook ] 
-        | (HTTP)
-        v
-[ API Gateway (Fiber v3) ]
-        |
-        v
-[ Payment Engine ] =================================================+
-  |                                                                  |
-  |-- BEGIN TRANSACTION (PostgreSQL pgx)                             |
-  |     |                                                            |
-  |     |--> 1. Insert into 'ledger_entries' (Credit + Debit)        | [ Atomic Database
-  |     |--> 2. Verify sum(Debits) - sum(Credits) == 0               |   Commit Boundary ]
-  |     |--> 3. Write event to 'outbox_events' (status: 'pending')   |
-  |     |                                                            |
-  |-- COMMIT TRANSACTION ============================================+
-        |
-        v
-[ Outbox Background Relay ]
-  (Polls unpublished outbox records)
-        |
-        v (Publishes Message)
-[ Apache Kafka Cluster ]
-  |-- Topic: 'payment.completed'
-        |
-        +---> [ Rewards Service ] -----> (Calculates Loyalty Points)
-        |
-        +---> [ Notification Service ] -> (Dispatches Email Receipt)
-        |
-        +---> [ Merchant Service ] ----> (Updates Settlement Ledger)</div>
+                                [ Client / Webhook ]
+                                | (HTTP)
+                                v
+                                [ API Gateway (Fiber v3) ]
+                                |
+                                v
+                                [ Payment Engine ] =================================================+
+                                | |
+                                |-- BEGIN TRANSACTION (PostgreSQL pgx) |
+                                | | |
+                                | |--> 1. Insert into 'ledger_entries' (Credit + Debit) | [ Atomic Database
+                                | |--> 2. Verify sum(Debits) - sum(Credits) == 0 | Commit Boundary ]
+                                | |--> 3. Write event to 'outbox_events' (status: 'pending') |
+                                | | |
+                                |-- COMMIT TRANSACTION ============================================+
+                                |
+                                v
+                                [ Outbox Background Relay ]
+                                (Polls unpublished outbox records)
+                                |
+                                v (Publishes Message)
+                                [ Apache Kafka Cluster ]
+                                |-- Topic: 'payment.completed'
+                                |
+                                +---> [ Rewards Service ] -----> (Calculates Loyalty Points)
+                                |
+                                +---> [ Notification Service ] -> (Dispatches Email Receipt)
+                                |
+                                +---> [ Merchant Service ] ----> (Updates Settlement Ledger)</div>
                             <div class="diagram-caption">
-                                Solves the dual-write problem: ledger state and outbox events commit together atomically.
+                                Solves the dual-write problem: ledger state and outbox events commit together
+                                atomically.
                             </div>
                         </div>
 
@@ -1219,25 +1264,33 @@
                                 <div class="decision-block">
                                     <div class="decision-block-title">Double-Entry Bookkeeping</div>
                                     <p class="decision-block-desc">
-                                        Money balances are never stored as a single mutable integer. Account balances are mathematically derived from an immutable stream of verified credit and debit ledger entries.
+                                        Money balances are never stored as a single mutable integer. Account balances
+                                        are mathematically derived from an immutable stream of verified credit and debit
+                                        ledger entries.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">Zero-ORM with SQLC</div>
                                     <p class="decision-block-desc">
-                                        Eliminated ORM overhead by writing hand-tuned SQL compiled into deterministic, type-safe Go code with <code>sqlc</code> and <code>pgx</code>. Catches syntax and type mismatches at build time.
+                                        Eliminated ORM overhead by writing hand-tuned SQL compiled into deterministic,
+                                        type-safe Go code with <code>sqlc</code> and <code>pgx</code>. Catches syntax
+                                        and type mismatches at build time.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">Transactional Outbox Pattern</div>
                                     <p class="decision-block-desc">
-                                        Ensures at-least-once message delivery to Kafka without distributed two-phase commits. If the message broker is temporarily offline, database transactions still commit safely.
+                                        Ensures at-least-once message delivery to Kafka without distributed two-phase
+                                        commits. If the message broker is temporarily offline, database transactions
+                                        still commit safely.
                                     </p>
                                 </div>
                                 <div class="decision-block">
                                     <div class="decision-block-title">OpenTelemetry Tracing</div>
                                     <p class="decision-block-desc">
-                                        Instruments HTTP and gRPC request flows across microservices with W3C <code>traceparent</code> headers, giving visibility into cross-service latency and bottlenecks.
+                                        Instruments HTTP and gRPC request flows across microservices with W3C
+                                        <code>traceparent</code> headers, giving visibility into cross-service latency
+                                        and bottlenecks.
                                     </p>
                                 </div>
                             </div>
@@ -1248,13 +1301,20 @@
                             <div class="tradeoff-row">
                                 <div class="tradeoff-heading">Trade-off: Monorepo vs. Multi-Repo for 7 Services</div>
                                 <div class="tradeoff-body">
-                                    <strong>Context:</strong> Managing 7 separate repositories requires tagging and versioning shared DTOs and protobuf definitions. Housing all 7 services in a single Go monorepo enables atomic multi-service refactors and unified CI/CD checks, while requiring strict package isolation rules to prevent leaky domain boundaries.
+                                    <strong>Context:</strong> Managing 7 separate repositories requires tagging and
+                                    versioning shared DTOs and protobuf definitions. Housing all 7 services in a single
+                                    Go monorepo enables atomic multi-service refactors and unified CI/CD checks, while
+                                    requiring strict package isolation rules to prevent leaky domain boundaries.
                                 </div>
                             </div>
                             <div class="tradeoff-row">
                                 <div class="tradeoff-heading">Challenge: Hot Merchant Account Lock Contention</div>
                                 <div class="tradeoff-body">
-                                    <strong>Context:</strong> Concurrent transactions paying the same popular merchant would serialize on row-level balance locks. Because the ledger is <em>append-only</em>, write operations only insert new journal rows without locking the merchant's aggregate balance, shifting calculation overhead to asynchronous read rollups.
+                                    <strong>Context:</strong> Concurrent transactions paying the same popular merchant
+                                    would serialize on row-level balance locks. Because the ledger is
+                                    <em>append-only</em>, write operations only insert new journal rows without locking
+                                    the merchant's aggregate balance, shifting calculation overhead to asynchronous read
+                                    rollups.
                                 </div>
                             </div>
                         </div>
@@ -1294,7 +1354,8 @@
             <header class="section-header">
                 <div class="section-index-tag">[02] Background & Focus</div>
                 <h2 class="section-title">Experience & Technical Domains</h2>
-                <p class="section-desc">Hands-on background in systems engineering and areas of current investigation.</p>
+                <p class="section-desc">Hands-on background in systems engineering and areas of current investigation.
+                </p>
             </header>
 
             <div class="exp-item">
@@ -1303,11 +1364,16 @@
                     <h3 class="exp-role">Full-Stack Developer Intern</h3>
                     <div class="exp-org">Bridgeon Solutions • Kozhikode, India</div>
                     <ul class="exp-bullet-list">
-                        <li>Engineered backend services and REST APIs in Go utilizing Clean Architecture and modular service patterns.</li>
-                        <li>Designed transactional workflows in PostgreSQL ensuring strict relational integrity and consistency.</li>
-                        <li>Implemented authentication pipelines using JWT, OAuth, refresh token rotation, and role-based access control (RBAC).</li>
-                        <li>Constructed concurrent asynchronous processing pipelines using goroutines, channels, and worker pools with context-based cancellation.</li>
-                        <li>Automated containerized deployments using Docker, GitHub Actions CI/CD pipelines, and AWS EC2 instances.</li>
+                        <li>Engineered backend services and REST APIs in Go utilizing Clean Architecture and modular
+                            service patterns.</li>
+                        <li>Designed transactional workflows in PostgreSQL ensuring strict relational integrity and
+                            consistency.</li>
+                        <li>Implemented authentication pipelines using JWT, OAuth, refresh token rotation, and
+                            role-based access control (RBAC).</li>
+                        <li>Constructed concurrent asynchronous processing pipelines using goroutines, channels, and
+                            worker pools with context-based cancellation.</li>
+                        <li>Automated containerized deployments using Docker, GitHub Actions CI/CD pipelines, and AWS
+                            EC2 instances.</li>
                     </ul>
                 </div>
             </div>
@@ -1318,7 +1384,8 @@
                     <h3 class="exp-role">Diploma in Electronics Engineering</h3>
                     <div class="exp-org">JDT Islam Polytechnic College • Kozhikode, India</div>
                     <ul class="exp-bullet-list">
-                        <li>Foundational coursework in digital logic, microprocessors, signal timing, and low-level computer architecture.</li>
+                        <li>Foundational coursework in digital logic, microprocessors, signal timing, and low-level
+                            computer architecture.</li>
                     </ul>
                 </div>
             </div>
@@ -1331,7 +1398,8 @@
                         <div class="interest-num">DOMAIN 01</div>
                         <div class="interest-title">Reliability & Distributed Failures</div>
                         <p class="interest-desc">
-                            Studying failure modes in asynchronous workflows: partition tolerance, dead-letter recovery strategies, exponential backoff with full jitter, and deterministic idempotency keys.
+                            Studying failure modes in asynchronous workflows: partition tolerance, dead-letter recovery
+                            strategies, exponential backoff with full jitter, and deterministic idempotency keys.
                         </p>
                     </div>
 
@@ -1339,7 +1407,9 @@
                         <div class="interest-num">DOMAIN 02</div>
                         <div class="interest-title">Type-Safe Relational Storage</div>
                         <p class="interest-desc">
-                            Prioritizing compiled SQL tooling like SQLC over runtime reflection ORMs. Designing ACID-compliant schemas, indexing strategies for high-frequency queries, and transactional outbox tables.
+                            Prioritizing compiled SQL tooling like SQLC over runtime reflection ORMs. Designing
+                            ACID-compliant schemas, indexing strategies for high-frequency queries, and transactional
+                            outbox tables.
                         </p>
                     </div>
 
@@ -1347,7 +1417,8 @@
                         <div class="interest-num">DOMAIN 03</div>
                         <div class="interest-title">Go Concurrency Ergonomics</div>
                         <p class="interest-desc">
-                            Structuring worker pools with strict lifecycle guarantees. Enforcing context propagation, zero-leak channel synchronization, and bounded goroutine memory footprints.
+                            Structuring worker pools with strict lifecycle guarantees. Enforcing context propagation,
+                            zero-leak channel synchronization, and bounded goroutine memory footprints.
                         </p>
                     </div>
                 </div>
@@ -1361,7 +1432,8 @@
             <header class="section-header" style="margin-bottom: 2rem;">
                 <div class="section-index-tag">[03] Communication</div>
                 <h2 class="section-title">Direct Contact</h2>
-                <p class="section-desc">Get in touch regarding backend engineering opportunities, architecture discussions, or collaboration.</p>
+                <p class="section-desc">Get in touch regarding backend engineering opportunities, architecture
+                    discussions, or collaboration.</p>
             </header>
 
             <div class="contact-grid">
@@ -1381,21 +1453,24 @@
                     <div class="coord-block">
                         <span class="coord-label">Code Repositories</span>
                         <span class="coord-value">
-                            <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">github.com/muhammedfazall</a>
+                            <a href="https://github.com/muhammedfazall" target="_blank"
+                                rel="noopener noreferrer">github.com/muhammedfazall</a>
                         </span>
                     </div>
 
                     <div class="coord-block">
                         <span class="coord-label">Professional Profile</span>
                         <span class="coord-value">
-                            <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer">linkedin.com/in/muhammedfazall</a>
+                            <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank"
+                                rel="noopener noreferrer">linkedin.com/in/muhammedfazall</a>
                         </span>
                     </div>
                 </div>
 
                 <!-- Preserved Web3Forms Form -->
                 <div>
-                    <form class="compact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                    <form class="compact-form" id="contact-form" action="https://api.web3forms.com/submit"
+                        method="POST">
                         <input type="hidden" name="access_key" value="2b122fca-fe20-4f33-ba69-032396eab5c8">
                         <input type="hidden" name="subject" value="New Portfolio Message from Muhammed Fazal Portfolio">
 
@@ -1412,12 +1487,15 @@
 
                         <div class="form-field">
                             <label for="subject_line">Subject</label>
-                            <input type="text" id="subject_line" name="subject_line" placeholder="Backend Role / Architecture Inquiry">
+                            <input type="text" id="subject_line" name="subject_line"
+                                placeholder="Backend Role / Architecture Inquiry">
                         </div>
 
                         <div class="form-field">
                             <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" placeholder="Brief outline of your project, opportunity, or inquiry..." required></textarea>
+                            <textarea id="message" name="message" rows="4"
+                                placeholder="Brief outline of your project, opportunity, or inquiry..."
+                                required></textarea>
                         </div>
 
                         <div class="form-submit-row">
@@ -1443,8 +1521,10 @@
             <div class="footer-nav">
                 <a href="#top">Back to Top ↑</a>
                 <a href="https://github.com/muhammedfazall" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="https://drive.google.com/file/d/1FAqzVAb4eYqLD4Ok16h81f2xKauBge6K/view?usp=sharing" target="_blank" rel="noopener noreferrer">Resume</a>
+                <a href="https://www.linkedin.com/in/muhammedfazall" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://drive.google.com/file/d/1FAqzVAb4eYqLD4Ok16h81f2xKauBge6K/view?usp=sharing"
+                    target="_blank" rel="noopener noreferrer">Resume</a>
             </div>
         </div>
     </footer>
